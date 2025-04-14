@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>E-Waste Collection & Resale</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background-color: #f0f4f8;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    .section {
+      max-width: 600px;
+      margin: 2rem auto;
+      background: white;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 0.6rem;
+      margin: 0.4rem 0;
+      font-size: 1rem;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    .entry {
+      background-color: #eef5f9;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>E-Waste Collection Center Finder</h1>
+
+  <!-- Search Collection Centers -->
+  <div class="section">
+    <h2>Find Nearby Collection Centers</h2>
+    <input type="text" id="cityInput" placeholder="Enter your city" />
+    <button onclick="searchCenters()">Search</button>
+    <div id="results"></div>
+  </div>
+
+  <!-- Resell Section -->
+  <div class="section">
+    <h2>Resell Your E-Waste</h2>
+    <form id="resaleForm">
+      <input type="text" id="userName" placeholder="Your Name" required />
+      <input type="text" id="userCity" placeholder="Your City" required />
+      <textarea id="deviceDetails" placeholder="Device details (e.g., Old Laptop, good condition)" required></textarea>
+      <input type="number" id="expectedPrice" placeholder="Expected Price (INR)" required />
+      <button type="submit">Submit Resale Request</button>
+    </form>
+    <div id="resaleList"></div>
+  </div>
+
+  <!-- Pickup Request Section -->
+  <div class="section">
+    <h2>Request Home Pickup</h2>
+    <form id="pickupForm">
+      <input type="text" id="pickupName" placeholder="Your Name" required />
+      <input type="text" id="pickupPhone" placeholder="Contact Number" required />
+      <input type="text" id="pickupAddress" placeholder="Your Full Address" required />
+      <textarea id="pickupDetails" placeholder="Describe your e-waste items" required></textarea>
+      <button type="submit">Request Pickup</button>
+    </form>
+    <div id="pickupRequests"></div>
+  </div>
+
+  <script>
+    const centers = [
+      { city: "Chennai", name: "Green Earth E-Waste", address: "123 Marina Road", phone: "9876543210" },
+      { city: "Mumbai", name: "Recycle Hub", address: "45 Linking Road", phone: "9123456780" },
+      { city: "Bangalore", name: "EcoBin", address: "12 MG Road", phone: "9345678901" },
+      { city: "Chennai", name: "TechWaste Solutions", address: "78 OMR", phone: "9786543210" },
+      { city: "Delhi", name: "Urban E-Waste", address: "65 Rajpath", phone: "9111223344" }
+    ];
+
+    function searchCenters() {
+      const city = document.getElementById("cityInput").value.trim().toLowerCase();
+      const resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = "";
+
+      const filtered = centers.filter(center => center.city.toLowerCase() === city);
+
+      if (filtered.length === 0) {
+        resultsDiv.innerHTML = "<p>No centers found for this city.</p>";
+        return;
+      }
+
+      filtered.forEach(center => {
+        resultsDiv.innerHTML += `
+          <div class="entry">
+            <strong>${center.name}</strong><br>
+            Address: ${center.address}<br>
+            Phone: ${center.phone}
+          </div>
+        `;
+      });
+    }
+
+    document.getElementById('resaleForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('userName').value;
+      const city = document.getElementById('userCity').value;
+      const details = document.getElementById('deviceDetails').value;
+      const price = document.getElementById('expectedPrice').value;
+      const resaleList = document.getElementById('resaleList');
+      resaleList.innerHTML += `
+        <div class="entry">
+          <strong>${name} (${city})</strong><br>
+          Device: ${details}<br>
+          Asking Price: ₹${price}
+        </div>
+      `;
+      document.getElementById('resaleForm').reset();
+    });
+
+    document.getElementById('pickupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('pickupName').value;
+      const phone = document.getElementById('pickupPhone').value;
+      const address = document.getElementById('pickupAddress').value;
+      const details = document.getElementById('pickupDetails').value;
+      const pickupList = document.getElementById('pickupRequests');
+      pickupList.innerHTML += `
+        <div class="entry">
+          <strong>${name}</strong><br>
+          Contact: ${phone}<br>
+          Address: ${address}<br>
+          E-Waste Items: ${details}
+        </div>
+      `;
+      document.getElementById('pickupForm').reset();
+    });
+  </script>
+</body>
+</html>
